@@ -102,15 +102,16 @@ green = (0, 255, 0)
 from math import sqrt, pow
 def mouse_event(event, x, y, flags, param):
     global LClick, RClick
-
+    global ix, iy, drawing
     if event == cv2.EVENT_LBUTTONDOWN:
         LClick=True
     elif event == cv2.EVENT_MOUSEMOVE and LClick:
         draw_flame(y, x, src1)
     elif event == cv2.EVENT_LBUTTONUP:
+        display_src1 = get_bbox_drawing_from_src(src1, imgs_car[cur_idx])
         LClick = False
-    global ix, iy, drawing
-    if event == cv2.EVENT_RBUTTONDOWN:
+
+    if event == cv2.EVENT_RBUTTONDOWN and LClick==False:
         RClick=True
         drawing = True
         (ix, iy)=  x, y
@@ -127,10 +128,18 @@ def mouse_event(event, x, y, flags, param):
         RClick = False
         display_src1 = get_bbox_drawing_from_src(src1, imgs_car[cur_idx])
         cv2.rectangle(display_src1, (ix, iy), (x, y), green,3)
+        fw = open(imgs_car[cur_idx].split('.')[0] + '.txt', 'a')
+        cls = 0
+        nx, ny, nw, nh = convert(ix, x, iy, y, src1.shape[0], src1.shape[1])
+        newline = str(cls) + ' ' + str(nx) + ' ' + str(ny) + ' ' + str(nw) + ' ' + str(nh) + '\n'
+        print(newline)
+        fw.write(newline)
+        fw.close()
         #print(ix, iy, x, y)
-        cv2.imshow('label', display_src1)
+        #cv2.imshow('label', display_src1)
     display_src1 = get_bbox_drawing_from_src(src1, imgs_car[cur_idx])
     cv2.imshow('label', display_src1)
+    cv2.imshow('org', src1)
     #cv2.imshow('label', src1)
 
 imgs_car = glob('roadcar/*.jpg')

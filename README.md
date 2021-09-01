@@ -8,7 +8,7 @@
 - esc -> 종료
 
 
-===
+---
 
 ![labeling](https://user-images.githubusercontent.com/59654033/131689883-d6cb21a3-207d-4637-8525-c38f30859226.gif)
 

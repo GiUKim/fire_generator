@@ -6,4 +6,6 @@
 - 2 press -> 화염 작아짐 (-20%)
 - 우클릭 -> bounding box 생성 후 .txt에 yolo형식으로 저장
 - esc -> 종료
+===
+![labeling](https://user-images.githubusercontent.com/59654033/131689883-d6cb21a3-207d-4637-8525-c38f30859226.gif)
 

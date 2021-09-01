@@ -62,6 +62,7 @@ def draw_flame(x, y, src1):
 
     src1[new_x:rows + new_x, new_y:cols + new_y] = dst
 
+'''
 def draw_smoke(x, y, src1, src2):
     rand_idx = random.sample(range(0, len(imgs_smoke)), 2)
     add1 = cv2.imread(imgs_smoke[rand_idx[0]])
@@ -95,6 +96,7 @@ def draw_smoke(x, y, src1, src2):
 
     dst = cv2.bitwise_or(src1_bg, src2_fg)
     src1[new_x:rows + new_x, new_y:cols + new_y] = dst
+'''
 
 drawing = False
 green = (0, 255, 0)
@@ -131,7 +133,7 @@ def mouse_event(event, x, y, flags, param):
         fw = open(imgs_car[cur_idx].split('.')[0] + '.txt', 'a')
         cls = 0
         nx, ny, nw, nh = convert(ix, x, iy, y, src1.shape[0], src1.shape[1])
-        newline = str(cls) + ' ' + str(nx) + ' ' + str(ny) + ' ' + str(nw) + ' ' + str(nh) + '\n'
+        newline = str(cls) + ' ' + str(round(nx, 6)) + ' ' + str(round(ny, 6)) + ' ' + str(round(nw, 6)) + ' ' + str(round(nh, 6)) + '\n'
         print(newline)
         fw.write(newline)
         fw.close()
@@ -139,7 +141,6 @@ def mouse_event(event, x, y, flags, param):
         #cv2.imshow('label', display_src1)
     display_src1 = get_bbox_drawing_from_src(src1, imgs_car[cur_idx])
     cv2.imshow('label', display_src1)
-    cv2.imshow('org', src1)
     #cv2.imshow('label', src1)
 
 imgs_car = glob('roadcar/*.jpg')
@@ -156,23 +157,27 @@ cur_idx = 0
 
 def get_bbox_drawing_from_src(src, img_file_path):
     bbox = np.zeros((src.shape[0], src.shape[1], 3), dtype=np.uint8)
-    fr = open(img_file_path.split('.')[0] + '.txt', 'r')
-    lines = fr.readlines()
-    for line in lines:
-        x, y, w, h = line.split(' ')[1:]
-        x = float(x)
-        y = float(y)
-        w = float(w)
-        h = float(h)
-        x1, x2, y1, y2 = reverse_convert(x, y, w, h, src.shape[0], src.shape[1])
-        cv2.rectangle(bbox, (x1, y1), (x2, y2), (0, 255, 0), 3)
+    try:
+        fr = open(img_file_path.split('.')[0] + '.txt', 'r')
+        lines = fr.readlines()
+        for line in lines:
+            x, y, w, h = line.split(' ')[1:]
+            x = float(x)
+            y = float(y)
+            w = float(w)
+            h = float(h)
+            x1, x2, y1, y2 = reverse_convert(x, y, w, h, src.shape[0], src.shape[1])
+            cv2.rectangle(bbox, (x1, y1), (x2, y2), (0, 255, 0), 3)
+        fr.close()
+    except:
+        pass
     # cv2.imshow('bbox', bbox)
     mask = cv2.cvtColor(bbox, cv2.COLOR_BGR2GRAY)
     mask_inv = cv2.bitwise_not(mask)
     box = cv2.bitwise_and(bbox, bbox, mask=mask)
     back = cv2.bitwise_and(src, src, mask=mask_inv)
     display_src1 = cv2.add(box, back)
-    fr.close()
+
     return display_src1
 
 
@@ -190,7 +195,7 @@ while True:
     src2_flame = cv2.add(add1, add2)
 
     rand_idx_smoke = random.randrange(0, len(imgs_smoke))
-    src2_smoke = cv2.imread(imgs_smoke[rand_idx_smoke], cv2.IMREAD_COLOR)
+    #src2_smoke = cv2.imread(imgs_smoke[rand_idx_smoke], cv2.IMREAD_COLOR)
 
     display_src1 = get_bbox_drawing_from_src(src1, imgs_car[cur_idx])
     cv2.imshow('label', display_src1)

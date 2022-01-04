@@ -1,4 +1,4 @@
-# fire_generator
+# flame_generator
 ---
 - /roadcar/ 폴더 데이터 삽입 후 .py 실행
 - 좌클릭 -> 화염 생성

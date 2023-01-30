@@ -195,7 +195,7 @@ while True:
     src2_flame = cv2.add(add1, add2)
 
     rand_idx_smoke = random.randrange(0, len(imgs_smoke))
-    #src2_smoke = cv2.imread(imgs_smoke[rand_idx_smoke], cv2.IMREAD_COLOR)
+    #src2_smoke = cv2.imread(imgs_smoke[rand_idx_smoke], cv2.IMREAD_COLOR) 
 
     display_src1 = get_bbox_drawing_from_src(src1, imgs_car[cur_idx])
     cv2.imshow('label', display_src1)
